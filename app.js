@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 9000;
+const port = process.env.PORT;
 
 app.get('/students', (req, res) => {
   res.json({
