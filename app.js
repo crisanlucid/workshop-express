@@ -5,37 +5,57 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+const port = 8000;
 
-app.get('/api/v1/resume', (req, res) => {
-  res.status(304).end();
+const superheroes = [
+  { id: 1, name: 'Profesor X' },
+  { id: 2, name: 'Spiderman' },
+  { id: 3, name: 'Shazam' },
+];
+
+app.get('/api/v1/superheroes', (req, res) => {
+  res.json(superheroes);
 });
 
-const listResume = require('./config.js');
+app.post('/api/v1/superheroes', (req, res) => {
+  const lastItem = superheroes[superheroes.length - 1];
+  const lastId = lastItem.id;
+  const sport = {
+    id: lastId + 1,
+    name: req.body.name,
+  };
+  superheroes.push(sport);
 
-app.get('/api/v1/user', (req, res) => {
-  res.json(listResume);
+  res.status(201).json(superheroes);
 });
 
-
-app.get('/api/v1/user/:id', (req, res) => {
-  res
-    .status(404)
-    .send(`user ID is ${req.params.id}, query string params: ${req.query.q}`);
+app.put('/api/v1/superheroes/:id', (req, res) => {
+  const superhero = superheroes.find(
+    target => target.id === parseInt(req.params.id),
+  );
+  superhero.name = req.body.name;
+  res.status(202).json(superhero);
 });
 
-app.post('/api/v1/user', (req, res) => {
-  console.log(req.body);
+app.patch('/api/v1/superheroes/:id', (req, res) => {
+  console.log('to do');
+});
 
-  // to do: query in DB
-  res.status(200).json({ name: req.body.name });
+app.delete('/api/v1/superheroes/:id', (req, res) => {
+  const superhero = superheroes.find(
+    target => target.id === parseInt(req.params.id),
+  );
+  const index = superheroes.indexOf(superhero);
+  superheroes.splice(index, 1);
+  res.status(202).json(superhero);
 });
 
 app.get(/wcs/, (req, res) => {
   res.send('regex');
 });
 
-app.listen(9000, () => {
-  console.log('- loading... port 9000');
+app.listen(port, () => {
+  console.log(`- loading... port ${port}`);
 });
 
 // // error handler
