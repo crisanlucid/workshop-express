@@ -1,0 +1,12 @@
+<% if (!user) { %>
+<div style="width:500px;height:180px;">
+  <h2 style="font-size:40px;">Welcome! Please log in.</h2>
+  <a href="/auth/facebook" class="btn btn-block btn-social btn-twitter">
+    <span class="fa fa-facebook"></span> Sign in with facebook
+  </a>
+</div>
+<% } else { %>
+<p>ID: <%= user.id %></p>
+<p>Name :<%= user.displayName %></p>
+<h2>Hello, <%= user.displayName %>.</h2>
+<% } %>
