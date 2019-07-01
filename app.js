@@ -1,52 +1,72 @@
 const express = require('express');
 
+const jwt = require('jsonwebtoken');
+
 const app = express();
-const bodyParser = require('body-parser');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+const port = process.env.PORT;
 
-app.get('/api/v1/resume', (req, res) => {
-  res.status(304).end();
+app.get('/api/v1/', (req, res) => {
+  res.json({
+    message: 'Welcome to API',
+  });
 });
 
-const listResume = require('./config.js');
+app.post('/api/v1/posts', verifyToken, (req, res) => {
+  jwt.verify(req.token, process.env.JWT_KEY, (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      res.json({
+        message: 'Posted created...',
+        authData,
+      });
+    }
+  });
+});
+app.post('/api/v1/login', (req, res) => {
+  // mock user
+  const user = {
+    id: 1,
+    username: 'Lucian',
+    email: 'lucian@gmail.com',
+  };
 
-app.get('/api/v1/user', (req, res) => {
-  res.json(listResume);
+  // create JWT
+  const token = jwt.sign({user}, process.env.JWT_KEY, {
+    expiresIn: '30s',
+  });
+
+  res.json({
+    message: 'Auth successfull',
+    token,
+  });
 });
 
+// format of Token
+// Authorization: Bearer <access_token>
 
-app.get('/api/v1/user/:id', (req, res) => {
-  res
-    .status(404)
-    .send(`user ID is ${req.params.id}, query string params: ${req.query.q}`);
+// verify token
+function verifyToken(req, res, next) {
+  // get auth header value
+  const bearerHeader = req.headers.authorization;
+
+  // check if bearer is undefined
+  console.log(bearerHeader);
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+
+    // set the token
+    req.token = bearerToken;
+    // next middleware
+    next();
+  } else {
+    // Forbidden
+    res.sendStatus(403);
+  }
+}
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
-
-app.post('/api/v1/user', (req, res) => {
-  console.log(req.body);
-
-  // to do: query in DB
-  res.status(200).json({ name: req.body.name });
-});
-
-app.get(/wcs/, (req, res) => {
-  res.send('regex');
-});
-
-app.listen(9000, () => {
-  console.log('- loading... port 9000');
-});
-
-// // error handler
-// app.use((err, req, res, next) => {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the errseor page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-
-module.exports = app;

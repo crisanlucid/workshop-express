@@ -1,0 +1,6 @@
+{
+    "env": {
+        "PORT": 9000,
+        "JWT_KEY": "secret-key"
+    }
+}
