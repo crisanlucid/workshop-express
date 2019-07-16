@@ -1,11 +1,11 @@
 {
-  "name": "checkpoint 3",
+  "name": "checkpoint",
   "version": "0.0.0",
   "description": "",
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "node ./bin/start",
+    "start": "set NODE_ENV=development && nodemon app.js",
     "test": "mocha --recursive"
   },
   "dependencies": {
