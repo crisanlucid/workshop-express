@@ -1,52 +1,47 @@
+const createError = require('http-errors');
 const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const port = 9000;
+
+const indexRouter = require('./routes/index');
 
 const app = express();
-const bodyParser = require('body-parser');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+// config db
+//require('./db/config');
 
-app.get('/api/v1/resume', (req, res) => {
-  res.status(304).end();
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
 });
 
-const listResume = require('./config.js');
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-app.get('/api/v1/user', (req, res) => {
-  res.json(listResume);
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
-
-app.get('/api/v1/user/:id', (req, res) => {
-  res
-    .status(404)
-    .send(`user ID is ${req.params.id}, query string params: ${req.query.q}`);
+app.listen(port, err => {
+  if (err) {
+    throw new Error('Something bad happened...');
+  }
+  console.log(`Server is listening on ${port}`);
 });
-
-app.post('/api/v1/user', (req, res) => {
-  console.log(req.body);
-
-  // to do: query in DB
-  res.status(200).json({ name: req.body.name });
-});
-
-app.get(/wcs/, (req, res) => {
-  res.send('regex');
-});
-
-app.listen(9000, () => {
-  console.log('- loading... port 9000');
-});
-
-// // error handler
-// app.use((err, req, res, next) => {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the errseor page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-
-module.exports = app;
