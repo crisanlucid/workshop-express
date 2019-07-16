@@ -2,7 +2,9 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-const port = 9000;
+const config = require('./config.js');
+
+const port = config.PORT || 9000;
 
 const indexRouter = require('./routes/index');
 
