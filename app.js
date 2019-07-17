@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const config = require('./config.js');
+const models = require('./models');
 
 const port = config.PORT || 9000;
 
@@ -41,9 +42,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(port, err => {
-  if (err) {
-    throw new Error('Something bad happened...');
-  }
-  console.log(`Server is listening on ${port}`);
+models.sequelize.sync({force: true}).then(() => {
+  app.listen(port, err => {
+    if (err) {
+      throw new Error('Something bad happened...');
+    }
+    console.log(`Server is listening on ${port}`);
+  });
 });
