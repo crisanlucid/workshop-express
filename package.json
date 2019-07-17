@@ -5,7 +5,8 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "set NODE_ENV=development && nodemon app.js",
+    "start": "export NODE_ENV=development && nodemon app.js",
+    "start:prod": "export NODE_ENV=production && nodemon app.js",
     "test": "mocha --recursive"
   },
   "dependencies": {
