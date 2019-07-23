@@ -2,11 +2,7 @@ const {Router} = require('express');
 
 const router = Router();
 
-const {
-  showAllPlaylists,
-  showAllSongs,
-  createPlaylist,
-} = require('../controllers/playlist');
+const {showAllPlaylists} = require('../controllers/playlist');
 
 /* GET index page. */
 router.get('/', (req, res) => {
@@ -16,7 +12,5 @@ router.get('/', (req, res) => {
 });
 
 router.get('/test', showAllPlaylists);
-
-router.post('/api/v1/playlists', createPlaylist);
 
 module.exports = router;
