@@ -8,6 +8,7 @@ const models = require('./models');
 const port = config.PORT || 9000;
 
 const indexRouter = require('./routes/index');
+const playlistsRouter = require('./routes/playlists');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api/v1', playlistsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
