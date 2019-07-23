@@ -1,15 +1,18 @@
 const {Playlist, Song} = require('../models');
 
-const showAllPlaylists = (req, res, next) => {
-  Playlist.findAll()
-    .then(foundPlaylists => res.json(foundPlaylists))
-    .catch(err => res.json({error: err}));
+const showAllPlaylists = async (req, res, next) => {
+  try {
+    const foundPlaylists = await Playlist.findAll();
+    res.json(foundPlaylists);
+  } catch (err) {
+    res.json({error: err});
+  }
 };
 
-const showAllSongs = (req, res) => {
-  //to do business logic:
-  res.send('everything is ok');
-};
+// const showAllSongs = (req, res) => {
+//   //to do business logic:
+//   res.send('everything is ok');
+// };
 
 const createPlaylist = async (req, res) => {
   console.log(req.body);
@@ -20,8 +23,20 @@ const createPlaylist = async (req, res) => {
     genre,
   });
 
-  const query = await Playlist.findAll();
-  res.json(query);
+  res.json(model);
 };
 
-module.exports = {showAllPlaylists, showAllSongs, createPlaylist};
+const updatePlaylistById = (deletePlaylistById = getPlaylistById = (
+  req,
+  res,
+) => {
+  res.send('ok');
+});
+
+module.exports = {
+  showAllPlaylists,
+  createPlaylist,
+  updatePlaylistById,
+  deletePlaylistById,
+  getPlaylistById,
+};
