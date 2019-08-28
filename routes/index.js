@@ -2,7 +2,7 @@ const {Router} = require('express');
 
 const router = Router();
 
-const {showAllPlaylists} = require('../controllers/playlist');
+const {showAllUsers} = require('../controllers/users');
 
 /* GET index page. */
 router.get('/', (req, res) => {
@@ -11,6 +11,6 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/test', showAllPlaylists);
+router.get('/test', showAllUsers);
 
 module.exports = router;

@@ -7,7 +7,7 @@
   "scripts": {
     "start": "export NODE_ENV=development && nodemon app.js",
     "start:prod": "export NODE_ENV=production && nodemon app.js",
-    "test": "mocha --recursive"
+    "test": "NODE_ENV=development jest --forceExit --detectOpenHandles  --silent"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -16,11 +16,12 @@
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
     "morgan": "^1.9.1",
-    "mysql2": "^1.6.5",
     "pug": "^2.0.4",
-    "sequelize": "^5.10.1"
+    "mongoose": "^5.5.13",
+    "bcrypt": "^3.0.2"
   },
   "devDependencies": {
+    "jest": "^23.6.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "eslint": "^5.16.0",
@@ -29,5 +30,14 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "nodemon": "^1.19.1"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "dist/"
+    ],
+    "restoreMocks": true
   }
 }
