@@ -1,5 +1,6 @@
 {
     "env": {
-        "NODE_ENV_1": "development"
+        "NODE_ENV_1": "development",
+        "MONGO_CONNECT": "mongodb://localhost:27017/api-design"
     }
 }
